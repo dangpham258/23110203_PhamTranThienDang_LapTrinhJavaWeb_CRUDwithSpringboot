@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin</title>
+  <%@ include file="_head.jspf" %>
+</head>
+<body>
+<%@ include file="_topbar.jspf" %>
+<div class="container py-4">
