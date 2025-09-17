@@ -42,4 +42,17 @@ public class UserServiceImpl implements UserService {
 	public List<User> findByFullnameContaining(String fullname) {
 		return repo.findByFullnameContaining(fullname);
 	}
+
+	@Override
+	public User findByUsername(String username) {
+		return repo.findByUsername(username);
+	}
+
+	@Override
+	public User authenticate(String username, String rawPassword) {
+		if (username == null || rawPassword == null) return null;
+		User u = repo.findByUsername(username);
+		if (u == null || !u.isActive()) return null;
+		return rawPassword.equals(u.getPassword()) ? u : null;
+	}
 }

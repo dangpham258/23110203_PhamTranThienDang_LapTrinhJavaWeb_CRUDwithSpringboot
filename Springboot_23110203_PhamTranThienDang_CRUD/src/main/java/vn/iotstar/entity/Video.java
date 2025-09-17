@@ -41,8 +41,8 @@ public class Video implements Serializable {
 	@Column(name = "Views")
 	private int views;
 	
-	// Connect ManyToOne to Category
-	@ManyToOne
-	@JoinColumn(name="CategoryId")
+    // Connect ManyToOne to Category
+    @ManyToOne
+    @JoinColumn(name="category_id")
 	private Category category;
 }

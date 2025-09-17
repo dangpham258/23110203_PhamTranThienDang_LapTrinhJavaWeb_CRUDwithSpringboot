@@ -1,7 +1,7 @@
 <%@ include file="/common/taglib.jsp" %>
 <jsp:directive.page contentType="text/html;charset=UTF-8" />
 
-<h4 class="mb-3">List Accounts</h4>
+<h4 class="mb-3">Danh sách Tài khoản</h4>
 
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
   <form action="<c:url value='/admin/users/search'/>" method="get" class="d-flex gap-2">

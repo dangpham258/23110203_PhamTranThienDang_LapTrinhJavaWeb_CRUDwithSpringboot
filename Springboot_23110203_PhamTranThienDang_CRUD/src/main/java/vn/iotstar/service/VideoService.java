@@ -15,4 +15,6 @@ public interface VideoService {
 	Video save(Video v);
 
 	List<Video> findAll();
+
+	long countByCategoryId(Long categoryId);
 }

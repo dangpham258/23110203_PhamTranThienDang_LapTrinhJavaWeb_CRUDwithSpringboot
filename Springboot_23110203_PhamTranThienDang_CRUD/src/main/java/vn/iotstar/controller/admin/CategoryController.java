@@ -26,12 +26,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.iotstar.entity.Category;
 import vn.iotstar.model.CategoryModel;
 import vn.iotstar.service.CategoryService;
+import vn.iotstar.service.VideoService;
 
 @Controller
 @RequestMapping("admin/categories")
 public class CategoryController {
 	@Autowired
 	CategoryService categoryService;
+	@Autowired
+	VideoService videoService;
 
 
 	@GetMapping
@@ -84,10 +87,17 @@ public class CategoryController {
 		return "redirect:/admin/categories/saveOrUpdate";
 	}
 
+
 	@GetMapping("delete/{id}")
-	public String delete(@PathVariable("id") Long id) {
+	public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+		long videos = videoService.countByCategoryId(id);
+		if (videos > 0) {
+			redirectAttributes.addFlashAttribute("message", "Không thể xóa vì danh mục đang có " + videos + " video.");
+			return "redirect:/admin/categories";
+		}
 		categoryService.deleteById(id);
-		return "redirect:/admin/categories?deleted";
+		redirectAttributes.addFlashAttribute("message", "Đã xóa danh mục thành công");
+		return "redirect:/admin/categories";
 	}
 
 	@RequestMapping("search")

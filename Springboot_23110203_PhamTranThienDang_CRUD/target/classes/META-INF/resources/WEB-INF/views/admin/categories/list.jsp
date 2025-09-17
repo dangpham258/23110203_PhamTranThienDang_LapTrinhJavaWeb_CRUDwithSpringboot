@@ -5,34 +5,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>List Category</title>
+  <title>Danh sách Danh mục</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-light">
   <div class="container py-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
-      <h1 class="h5 m-0"><a class="text-decoration-none" href="<c:url value='/admin/categories'/>">List Category</a></h1>
+      <h1 class="h5 m-0"><a class="text-decoration-none" href="<c:url value='/admin/categories'/>">Danh sách Danh mục</a></h1>
       <div class="d-flex gap-2">
         <form class="d-flex" method="get" action="<c:url value='/admin/categories/search'/>">
           <input type="text" class="form-control form-control-sm me-2" name="name" placeholder="Tìm theo tên..." value="${param.name}">
           <button class="btn btn-sm btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
         </form>
-        <a class="btn btn-primary" href="<c:url value='/admin/categories/add'/>"><i class="bi bi-plus-circle me-1"></i>New</a>
+        <a class="btn btn-primary" href="<c:url value='/admin/categories/add'/>"><i class="bi bi-plus-circle me-1"></i>Thêm mới</a>
+        <a class="btn btn-outline-primary" href="<c:url value='/admin/index'/>"><i class="bi bi-house me-1"></i>Trang chủ</a>
       </div>
     </div>
 
+    <c:if test="${not empty message}">
+      <div class="alert alert-info">${message}</div>
+    </c:if>
     <div class="card shadow-sm">
       <div class="card-body p-0">
         <div class="table-responsive">
           <table class="table table-hover align-middle m-0">
             <thead class="table-light">
               <tr>
-                <th style="width:120px">Category ID</th>
-                <th style="width:220px">Category Code</th>
-                <th>Category Name</th>
-                <th style="width:140px">Status</th>
-                <th style="width:160px" class="text-end">Action</th>
+                <th style="width:120px">Mã</th>
+                <th style="width:220px">Mã danh mục</th>
+                <th>Tên danh mục</th>
+                <th style="width:140px">Trạng thái</th>
+                <th style="width:160px" class="text-end">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -76,36 +80,38 @@
     </div>
 
     <c:set var="listPath" value="${empty param.name ? '/admin/categories' : '/admin/categories/search'}"/>
-    <nav aria-label="Pagination" class="mt-3">
-      <ul class="pagination pagination-sm mb-0">
-        <li class="page-item ${currentPage == 0 ? 'disabled' : ''}">
-          <c:url var="prevUrl" value="${listPath}">
-            <c:param name="page" value="${currentPage-1}"/>
-            <c:param name="size" value="${pageSize}"/>
-            <c:if test="${not empty param.name}"><c:param name="name" value="${param.name}"/></c:if>
-          </c:url>
-          <a class="page-link" href="${prevUrl}">Previous</a>
-        </li>
-        <c:forEach var="i" begin="0" end="${totalPages - 1}">
-          <li class="page-item ${i == currentPage ? 'active' : ''}">
-            <c:url var="pageUrl" value="${listPath}">
-              <c:param name="page" value="${i}"/>
+    <c:if test="${totalPages > 0}">
+      <nav aria-label="Pagination" class="mt-3">
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item ${currentPage == 0 ? 'disabled' : ''}">
+            <c:url var="prevUrl" value="${listPath}">
+              <c:param name="page" value="${currentPage-1}"/>
               <c:param name="size" value="${pageSize}"/>
               <c:if test="${not empty param.name}"><c:param name="name" value="${param.name}"/></c:if>
             </c:url>
-            <a class="page-link" href="${pageUrl}">${i + 1}</a>
+            <a class="page-link" href="${prevUrl}">Previous</a>
           </li>
-        </c:forEach>
-        <li class="page-item ${currentPage >= totalPages - 1 ? 'disabled' : ''}">
-          <c:url var="nextUrl" value="${listPath}">
-            <c:param name="page" value="${currentPage+1}"/>
-            <c:param name="size" value="${pageSize}"/>
-            <c:if test="${not empty param.name}"><c:param name="name" value="${param.name}"/></c:if>
-          </c:url>
-          <a class="page-link" href="${nextUrl}">Next</a>
-        </li>
-      </ul>
-    </nav>
+          <c:forEach var="i" begin="0" end="${totalPages > 0 ? totalPages - 1 : 0}">
+            <li class="page-item ${i == currentPage ? 'active' : ''}">
+              <c:url var="pageUrl" value="${listPath}">
+                <c:param name="page" value="${i}"/>
+                <c:param name="size" value="${pageSize}"/>
+                <c:if test="${not empty param.name}"><c:param name="name" value="${param.name}"/></c:if>
+              </c:url>
+              <a class="page-link" href="${pageUrl}">${i + 1}</a>
+            </li>
+          </c:forEach>
+          <li class="page-item ${currentPage >= totalPages - 1 ? 'disabled' : ''}">
+            <c:url var="nextUrl" value="${listPath}">
+              <c:param name="page" value="${currentPage+1}"/>
+              <c:param name="size" value="${pageSize}"/>
+              <c:if test="${not empty param.name}"><c:param name="name" value="${param.name}"/></c:if>
+            </c:url>
+            <a class="page-link" href="${nextUrl}">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </c:if>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

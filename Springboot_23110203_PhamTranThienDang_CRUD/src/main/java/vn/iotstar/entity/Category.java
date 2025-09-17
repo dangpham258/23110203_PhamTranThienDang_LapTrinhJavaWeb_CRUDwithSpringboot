@@ -11,30 +11,30 @@ import lombok.*;
 @Data
 
 @Entity
-@Table(name = "Category")
+@Table(name = "categories")
 @NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
 public class Category implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CategoryId")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
 	private Long categoryId;
 	
-	@Column(name = "CategoryCode")
+    @Column(name = "category_code")
 	private String categorycode;
 	
-	@Column(name = "CategoryName", columnDefinition = "nvarchar(255)")
+    @Column(name = "category_name", columnDefinition = "nvarchar(255)")
 	private String categoryname;
 	
-	@Column(name = "Images")
+    @Column(name = "images")
 	private String images;
 	
-	@Column(name = "Status")
+    @Column(name = "status")
 	private boolean status;
 	
-	// Connect one to one to Video
-	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    // Tránh xóa dây chuyền video khi xóa category
+    @OneToMany(mappedBy = "category")
 	private Set<Video> videos;
 }

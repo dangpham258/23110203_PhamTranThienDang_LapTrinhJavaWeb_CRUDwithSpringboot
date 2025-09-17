@@ -1,14 +1,15 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/common/taglib.jsp" %>
 <jsp:directive.page contentType="text/html;charset=UTF-8" />
 
-<h4 class="mb-3">List Videos</h4>
+<h4 class="mb-3">Danh sách Video</h4>
 
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
   <form action="<c:url value='/admin/videos/search'/>" method="get" class="d-flex gap-2">
-    <input class="form-control" type="text" name="q" placeholder="Search title/category...">
-    <button class="btn btn-outline-primary"><i class="bi bi-search"></i> Search</button>
+    <input class="form-control" type="text" name="q" placeholder="Tìm theo tiêu đề/danh mục...">
+    <button class="btn btn-outline-primary"><i class="bi bi-search"></i> Tìm kiếm</button>
   </form>
-  <a href="<c:url value='/admin/videos/add'/>" class="btn btn-success"><i class="bi bi-plus-lg"></i> New</a>
+  <a href="<c:url value='/admin/videos/add'/>" class="btn btn-success"><i class="bi bi-plus-lg"></i> Thêm mới</a>
 </div>
 
 <div class="app-card card p-0">
@@ -31,7 +32,7 @@
           <td class="d-flex gap-2">
             <a class="btn btn-warning btn-sm" href="<c:url value='/admin/videos/edit/${v.videoId}'/>"><i class="bi bi-pencil-square"></i></a>
             <a class="btn btn-danger btn-sm" href="<c:url value='/admin/videos/delete/${v.videoId}'/>"
-               onclick="return confirm('Delete video?')"><i class="bi bi-trash"></i></a>
+               onclick="return confirm('Xóa video?')"><i class="bi bi-trash"></i></a>
           </td>
         </tr>
       </c:forEach>

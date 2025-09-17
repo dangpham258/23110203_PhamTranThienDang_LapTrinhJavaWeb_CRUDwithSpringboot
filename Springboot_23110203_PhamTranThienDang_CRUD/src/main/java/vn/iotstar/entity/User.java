@@ -19,13 +19,13 @@ public class User implements Serializable {
     @Column(name="Username", length=100, nullable=false, unique=true)
     private String username;
 
-    @Column(name="PasswordHash", length=200, nullable=false)
-    private String passwordHash;
+    @Column(name="Password", length=200, nullable=false)
+    private String password;
 
     @Column(name="Fullname", columnDefinition="nvarchar(255)")
     private String fullname;
 
-    @Column(name="RoleName", length=50) // ADMIN / STAFF / VIEWER
+    @Column(name="RoleName", length=50)
     private String roleName;
 
     @Column(name="Active")

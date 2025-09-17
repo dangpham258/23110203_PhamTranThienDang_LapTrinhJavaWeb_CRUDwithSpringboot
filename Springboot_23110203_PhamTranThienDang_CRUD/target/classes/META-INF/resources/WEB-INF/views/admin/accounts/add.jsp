@@ -31,8 +31,8 @@
     </div>
 
     <div class="col-12 d-flex justify-content-end gap-2">
-      <a href="<c:url value='/admin/users'/>" class="btn btn-outline-secondary"><i class="bi bi-list"></i> List</a>
-      <button class="btn btn-primary"><i class="bi bi-save"></i> Save</button>
+      <a href="<c:url value='/admin/users'/>" class="btn btn-outline-secondary"><i class="bi bi-list"></i> Danh sách</a>
+      <button class="btn btn-primary"><i class="bi bi-save"></i> Lưu</button>
     </div>
   </form>
 </div>

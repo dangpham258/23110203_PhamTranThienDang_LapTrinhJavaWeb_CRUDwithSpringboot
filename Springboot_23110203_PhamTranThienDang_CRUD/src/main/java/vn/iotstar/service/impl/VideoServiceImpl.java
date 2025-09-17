@@ -39,4 +39,9 @@ public class VideoServiceImpl implements VideoService {
 	public List<Video> findByTitleContaining(String title) {
 		return repo.findByTitleContaining(title);
 	}
+
+	@Override
+	public long countByCategoryId(Long categoryId) {
+		return repo.countByCategoryCategoryId(categoryId);
+	}
 }

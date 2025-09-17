@@ -18,4 +18,11 @@ public interface UserService {
 
 	List<User> findAll();
 	
+	User findByUsername(String username);
+	
+	/**
+	 * Trả về User nếu username/password hợp lệ và active, ngược lại null.
+	 */
+	User authenticate(String username, String rawPassword);
+	
 }
