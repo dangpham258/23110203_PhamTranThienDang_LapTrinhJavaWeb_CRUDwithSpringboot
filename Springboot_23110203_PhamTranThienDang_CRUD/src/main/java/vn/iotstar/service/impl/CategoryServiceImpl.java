@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import vn.iotstar.entity.Category;
@@ -28,6 +30,11 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<Category> findByCategorynameContaining(String name) {
 		return categoryRepository.findByCategorynameContaining(name);
+	}
+
+	@Override
+	public Page<Category> findByCategorynameContaining(String name, Pageable pageable) {
+		return categoryRepository.findByCategorynameContaining(name, pageable);
 	}
 
 	@Override

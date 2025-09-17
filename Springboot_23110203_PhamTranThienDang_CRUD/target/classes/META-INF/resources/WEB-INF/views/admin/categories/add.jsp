@@ -13,6 +13,12 @@
   <div class="container py-4">
     <h1 class="h4 mb-3"><c:out value='${category.categoryId == null ? "Add New Category" : "Edit Category"}'/></h1>
 
+    <c:if test="${not empty message}">
+      <div class="alert alert-primary" role="alert">
+        ${message}
+      </div>
+    </c:if>
+
     <div class="card shadow-sm">
       <div class="card-body">
         <form action="<c:url value='/admin/categories/saveOrUpdate'/>" method="post" autocomplete="off">

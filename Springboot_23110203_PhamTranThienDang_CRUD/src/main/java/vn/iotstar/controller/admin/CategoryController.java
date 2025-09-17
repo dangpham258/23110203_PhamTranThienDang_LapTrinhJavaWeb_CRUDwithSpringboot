@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,9 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.validation.Valid;
 import vn.iotstar.entity.Category;
 import vn.iotstar.model.CategoryModel;
 import vn.iotstar.service.CategoryService;
@@ -31,15 +33,31 @@ public class CategoryController {
 	@Autowired
 	CategoryService categoryService;
 
+
 	@GetMapping
-	public String list(ModelMap model) {
-		model.addAttribute("categories", categoryService.findAll());
+	public String list(ModelMap model,
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") int size) {
+		Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
+		Page<Category> p = categoryService.findByCategorynameContaining("", pageable);
+		model.addAttribute("categories", p.getContent());
+		model.addAttribute("currentPage", p.getNumber());
+		model.addAttribute("totalPages", p.getTotalPages());
+		model.addAttribute("pageSize", p.getSize());
 		return "admin/categories/list";
 	}
 
 	@GetMapping("add")
 	public String add(ModelMap model) {
 		model.addAttribute("category", new CategoryModel());
+		return "admin/categories/add";
+	}
+
+	@GetMapping("saveOrUpdate")
+	public String saveOrUpdateForm(ModelMap model) {
+		if (!model.containsAttribute("category")) {
+			model.addAttribute("category", new CategoryModel());
+		}
 		return "admin/categories/add";
 	}
 
@@ -55,14 +73,15 @@ public class CategoryController {
 
 	@PostMapping("saveOrUpdate")
 	public String saveOrUpdate(@ModelAttribute("category") CategoryModel dto, BindingResult result,
-			ModelMap model) {
+			ModelMap model, RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			return "admin/categories/add";
 		}
 		var entity = new Category();
 		BeanUtils.copyProperties(dto, entity);
 		categoryService.save(entity);
-		return "redirect:/admin/categories?success";
+		redirectAttributes.addFlashAttribute("message", "Category đã được thêm thành công");
+		return "redirect:/admin/categories/saveOrUpdate";
 	}
 
 	@GetMapping("delete/{id}")
@@ -73,12 +92,31 @@ public class CategoryController {
 
 	@RequestMapping("search")
 	public String search(ModelMap model,
-			@RequestParam(name = "name", required = false) String name) {
-		var list = StringUtils.hasText(name)
-				? categoryService.findByCategorynameContaining(name)
-				: categoryService.findAll();
-		model.addAttribute("categories", list);
+			@RequestParam(name = "name", required = false) String name,
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") int size) {
+		String keyword = (name == null) ? "" : name.trim();
+		Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
+		Page<Category> p;
+		if (StringUtils.hasText(keyword)) {
+			p = categoryService.findByCategorynameContaining(keyword, pageable);
+		} else {
+			p = categoryService.findByCategorynameContaining("", pageable);
+		}
+		model.addAttribute("categories", p.getContent());
+		model.addAttribute("currentPage", p.getNumber());
+		model.addAttribute("totalPages", p.getTotalPages());
+		model.addAttribute("pageSize", p.getSize());
+		if (StringUtils.hasText(keyword)) {
+			model.addAttribute("name", keyword);
+		}
 		return "admin/categories/list";
+	}
+
+	private String normalize(String input) {
+		if (input == null) return "";
+		var temp = java.text.Normalizer.normalize(input, java.text.Normalizer.Form.NFD);
+		return temp.replaceAll("\\p{InCombiningDiacriticalMarks}+", "").toLowerCase();
 	}
 	
 	@GetMapping("view/{id}")
